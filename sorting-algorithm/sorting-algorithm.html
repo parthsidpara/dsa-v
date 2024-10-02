@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Interactive Sorting Algorithm Visualizer</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+
+    <link rel="stylesheet" href="sorting-algorithm.css">
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Advanced Interactive Sorting Algorithm Visualizer</h1>
+        <div class="controls">
+            <select id="algorithm">
+                <option value="bubble">Bubble Sort</option>
+                <option value="selection">Selection Sort</option>
+                <option value="insertion">Insertion Sort</option>
+                <option value="quick">Quick Sort</option>
+                <option value="merge">Merge Sort</option>
+                <option value="heap">Heap Sort</option>
+            </select>
+            <input type="number" id="elementCount" min="10" max="200" value="50" placeholder="Number of elements">
+            <input type="number" id="speed" min="1" max="100" value="50" placeholder="Speed (1-100)">
+            <button onclick="generateBars()">Generate New Array</button>
+            <button onclick="startSort()">Start Sorting</button>
+            <button id="pauseResume" onclick="pauseResumeSorting()">Pause</button>
+            <button onclick="stepSort()">Step</button>
+            <button onclick="openCustomArrayModal()">Custom Array</button>
+        </div>
+        <div id="visualizer"></div>
+        <div id="stats"></div>
+        <div id="timeComplexity"></div>
+        <div id="algorithmInfo"></div>
+        <canvas id="performanceChart"></canvas>
+    </div>
+
+    <div id="customArrayModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeCustomArrayModal()">&times;</span>
+            <h2>Enter Custom Array</h2>
+            <p>Enter comma-separated numbers (e.g., 5,2,9,1,5,6)</p>
+            <input type="text" id="customArrayInput">
+            <button onclick="applyCustomArray()">Apply</button>
+        </div>
+    </div>
+
+    <script src="sorting-algorithm.js"></script>
+</body>
+
+</html>

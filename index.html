@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visualize DSA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .hero {
+      background: linear-gradient(to right, rgba(30, 58, 138, 0.85), rgba(0, 122, 255, 0.85)), url('images/hero-bg.jpg');
+      background-size: cover;
+      background-position: center;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50">
+
+  <!-- Navbar -->
+  <nav class="bg-white shadow-lg sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 py-4">
+      <div class="flex justify-between items-center">
+        <h1 class="text-3xl font-bold text-gray-800">Visualize DSA</h1>
+        <div>
+          <a href="#" class="text-lg text-blue-500 font-semibold hover:text-blue-700">Home</a>
+          <a href="about.html" class="ml-4 text-lg text-blue-500 font-semibold hover:text-blue-700">About</a>
+          <a href="contact.html" class="ml-4 text-lg text-blue-500 font-semibold hover:text-blue-700">Contact</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+<section class="hero h-screen text-white flex items-center justify-center text-center relative">
+  <div class="space-y-6 z-10">
+    <h2 class="text-6xl font-bold mb-4">Welcome to Visualize DSA</h2>
+    <p class="text-xl max-w-2xl mx-auto mb-12 p-6 mb-8">Master Data Structures and Algorithms through interactive visualizations that bring concepts to life.</p>
+    <a href="#visualizers" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-8 rounded-full shadow-md transition transform hover:scale-105">Start Exploring</a>
+  </div>
+  <div class="absolute inset-0 bg-black opacity-25 z-0"></div>
+</section>
+
+
+
+  <!-- Main Content -->
+  <div id="visualizers" class="container mx-auto mt-10 px-4">
+    <h2 class="text-4xl font-bold text-center text-gray-800 mb-8">Explore Our Visualizers</h2>
+    <p class="text-center text-lg text-gray-600 mb-12">Discover interactive visualizers for various data structures and algorithms below.</p>
+
+    <!-- Cards Section -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+
+      <!-- Linked List Visualizer -->
+      <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition transform hover:scale-105">
+        <img src="images/linked-list.webp" alt="Linked List" class="w-full h-40 object-cover rounded-lg mb-4">
+        <h3 class="text-2xl font-semibold text-gray-800">Linked List Visualizer</h3>
+        <p class="mt-4 text-gray-600">Visualize how a linked list works with interactive controls and visualization.</p>
+        <a href="linked-list/linked-list.html" class="block mt-4 text-center bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600">Visualize</a>
+      </div>
+
+      <!-- Sorting Algorithm Visualizer -->
+      <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition transform hover:scale-105">
+        <img src="images/sorting-algorithm.webp" alt="Sorting Algorithm" class="w-full h-40 object-cover rounded-lg mb-4">
+        <h3 class="text-2xl font-semibold text-gray-800">Sorting Algorithm Visualizer</h3>
+        <p class="mt-4 text-gray-600">Understand sorting algorithms like Bubble Sort, Merge Sort, etc., step by step.</p>
+        <a href="sorting-algorithm/sorting-algorithm.html" class="block mt-4 text-center bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600">Visualize</a>
+      </div>
+
+      <!-- Binary Tree Visualizer -->
+      <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition transform hover:scale-105">
+        <img src="images/binary-tree.webp" alt="Binary Tree" class="w-full h-40 object-cover rounded-lg mb-4">
+        <h3 class="text-2xl font-semibold text-gray-800">Binary Tree Visualizer</h3>
+        <p class="mt-4 text-gray-600">Learn about binary trees with this intuitive visual representation.</p>
+        <a href="#" class="block mt-4 text-center bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600">Coming soon...</a>
+      </div>
+
+      <!-- Graph Algorithm Visualizer -->
+      <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition transform hover:scale-105">
+        <img src="images/graph.webp" alt="Graph Algorithm" class="w-full h-40 object-cover rounded-lg mb-4">
+        <h3 class="text-2xl font-semibold text-gray-800">Graph Algorithm Visualizer</h3>
+        <p class="mt-4 text-gray-600">Explore graph traversal algorithms like BFS and DFS with interactive visuals.</p>
+        <a href="#" class="block mt-4 text-center bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600">Coming soon...</a>
+      </div>
+
+      <!-- Stack and Queue Visualizer -->
+      <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition transform hover:scale-105">
+        <img src="images/stack-queue.png" alt="Stack and Queue" class="w-full h-40 object-cover rounded-lg mb-4">
+        <h3 class="text-2xl font-semibold text-gray-800">Stack & Queue Visualizer</h3>
+        <p class="mt-4 text-gray-600">Visualize how stacks and queues work and see them in action.</p>
+        <a href="#" class="block mt-4 text-center bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600">Coming soon...</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-gradient-to-r from-blue-600 to-blue-800 mt-10 py-6">
+    <div class="text-center text-white">
+      <p class="text-lg">&copy; 2024 Visualize DSA. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+</body>
+
+</html>
