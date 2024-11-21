@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Queue Visualizer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes slide-in {
+            from { transform: translateX(-100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slide-out {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center justify-center p-4">
+    <div class="bg-white shadow-2xl rounded-xl p-6 w-full max-w-2xl">
+        <h1 class="text-3xl font-bold mb-6 text-center text-blue-600">Queue Visualizer</h1>
+        
+        <div class="flex mb-4 space-x-4">
+            <input 
+                type="text" 
+                id="elementInput" 
+                placeholder="Enter queue element" 
+                class="flex-grow p-2 border rounded"
+            >
+            <button 
+                id="enqueueBtn" 
+                class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition"
+            >
+                Enqueue
+            </button>
+            <button 
+                id="dequeueBtn" 
+                class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition"
+            >
+                Dequeue
+            </button>
+        </div>
+
+        <div 
+            id="queueContainer" 
+            class="flex flex-wrap gap-2 min-h-[100px] border-2 border-dashed border-gray-300 p-4 rounded"
+        >
+            <div id="emptyMessage" class="text-gray-500 w-full text-center">
+                Queue is empty
+            </div>
+        </div>
+
+        <div class="mt-4 bg-blue-50 p-4 rounded">
+            <h3 class="font-semibold mb-2 text-blue-700">Queue Stats</h3>
+            <div class="flex justify-between">
+                <span>Size: <span id="queueSize">0</span></span>
+                <span>First Element: <span id="firstElement">-</span></span>
+                <span>Last Element: <span id="lastElement">-</span></span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class QueueVisualizer {
+            constructor() {
+                this.queue = [];
+                this.elements = [];
+                
+                this.elementInput = document.getElementById('elementInput');
+                this.enqueueBtn = document.getElementById('enqueueBtn');
+                this.dequeueBtn = document.getElementById('dequeueBtn');
+                this.queueContainer = document.getElementById('queueContainer');
+                this.emptyMessage = document.getElementById('emptyMessage');
+                this.queueSizeEl = document.getElementById('queueSize');
+                this.firstElementEl = document.getElementById('firstElement');
+                this.lastElementEl = document.getElementById('lastElement');
+
+                this.setupEventListeners();
+            }
+
+            setupEventListeners() {
+                this.enqueueBtn.addEventListener('click', () => this.enqueue());
+                this.dequeueBtn.addEventListener('click', () => this.dequeue());
+            }
+
+            enqueue() {
+                const value = this.elementInput.value.trim();
+                if (!value) return;
+
+                this.queue.push(value);
+                this.renderQueue();
+                this.elementInput.value = '';
+            }
+
+            dequeue() {
+                if (this.queue.length === 0) return;
+
+                const removedElement = this.queue.shift();
+                this.renderQueue();
+            }
+
+            renderQueue() {
+                // Clear previous elements
+                while (this.elements.length) {
+                    this.elements.pop().remove();
+                }
+
+                // Toggle empty message
+                this.emptyMessage.style.display = 
+                    this.queue.length ? 'none' : 'block';
+
+                // Create new queue elements
+                this.queue.forEach((item, index) => {
+                    const el = document.createElement('div');
+                    el.className = `
+                        bg-blue-500 text-white px-3 py-2 rounded 
+                        text-sm animate-slide-in
+                        ${index === 0 ? 'border-2 border-green-400' : ''}
+                    `;
+                    el.textContent = item;
+                    el.style.animation = 'slide-in 0.3s ease';
+                    this.queueContainer.appendChild(el);
+                    this.elements.push(el);
+                });
+
+                // Update queue stats
+                this.queueSizeEl.textContent = this.queue.length;
+                this.firstElementEl.textContent = this.queue[0] || '-';
+                this.lastElementEl.textContent = 
+                    this.queue[this.queue.length - 1] || '-';
+            }
+        }
+
+        new QueueVisualizer();
+    </script>
+</body>
+</html>

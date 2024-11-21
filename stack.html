@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stack Visualizer</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f4f8;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 300px;
+        }
+        #stack {
+            display: flex;
+            flex-direction: column-reverse;
+            width: 200px;
+            min-height: 300px;
+            border: 2px solid #3498db;
+            margin-bottom: 15px;
+        }
+        .stack-item {
+            background-color: #3498db;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        .controls {
+            display: flex;
+            gap: 10px;
+        }
+        button {
+            background-color: #2ecc71;
+            border: none;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #27ae60;
+        }
+        #push-input {
+            padding: 8px;
+            margin-right: 10px;
+            border: 1px solid #bdc3c7;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="stack"></div>
+        <div class="controls">
+            <input type="text" id="push-input" placeholder="Enter value">
+            <button onclick="pushToStack()">Push</button>
+            <button onclick="popFromStack()">Pop</button>
+        </div>
+    </div>
+
+    <script>
+        class StackVisualizer {
+            constructor() {
+                this.stack = [];
+                this.stackElement = document.getElementById('stack');
+            }
+
+            push(value) {
+                if (value.trim() === '') return;
+                this.stack.push(value);
+                this.render();
+            }
+
+            pop() {
+                if (this.stack.length === 0) {
+                    alert('Stack is empty!');
+                    return;
+                }
+                this.stack.pop();
+                this.render();
+            }
+
+            render() {
+                this.stackElement.innerHTML = '';
+                this.stack.forEach(item => {
+                    const itemElement = document.createElement('div');
+                    itemElement.classList.add('stack-item');
+                    itemElement.textContent = item;
+                    this.stackElement.appendChild(itemElement);
+                });
+            }
+        }
+
+        const stackVisualizer = new StackVisualizer();
+
+        function pushToStack() {
+            const input = document.getElementById('push-input');
+            stackVisualizer.push(input.value);
+            input.value = '';
+        }
+
+        function popFromStack() {
+            stackVisualizer.pop();
+        }
+    </script>
+</body>
+</html>

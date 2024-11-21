@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Academic Network Graph Visualization</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0f4f8;
+        }
+        .container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+        #graph-container {
+            position: relative;
+            height: 700px;
+            border: 1px solid #e1e8f0;
+            margin-bottom: 20px;
+        }
+        #controls {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .control-section {
+            background-color: #f4f7fa;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        #network-info {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .info-card {
+            background-color: #e9f0f5;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .node-label {
+            font-size: 10px;
+            fill: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Academic Network Graph Visualization</h1>
+        
+        <div id="controls">
+            <div class="control-section">
+                <h3>Network Parameters</h3>
+                <label>Number of Nodes:</label>
+                <input type="range" id="node-count" min="5" max="50" value="20">
+                <span id="node-count-display">20</span>
+            </div>
+            
+            <div class="control-section">
+                <h3>Network Type</h3>
+                <select id="network-type">
+                    <option value="random">Random Network</option>
+                    <option value="scalefree">Scale-Free Network</option>
+                    <option value="smallworld">Small-World Network</option>
+                </select>
+            </div>
+            
+            <div class="control-section">
+                <h3>Visualization Mode</h3>
+                <select id="layout-mode">
+                    <option value="force">Force-Directed Layout</option>
+                    <option value="cluster">Cluster Layout</option>
+                    <option value="radial">Radial Layout</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="graph-container"></div>
+        
+        <div id="network-info">
+            <div class="info-card">
+                <h4>Total Nodes</h4>
+                <p id="total-nodes">-</p>
+            </div>
+            <div class="info-card">
+                <h4>Total Connections</h4>
+                <p id="total-connections">-</p>
+            </div>
+            <div class="info-card">
+                <h4>Network Density</h4>
+                <p id="network-density">-</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class AcademicNetworkGenerator {
+            constructor(nodeCount) {
+                this.nodeCount = nodeCount;
+                this.nodes = [];
+                this.links = [];
+            }
+
+            generateRandomNetwork() {
+                // Nodes with academic attributes
+                this.nodes = Array.from({length: this.nodeCount}, (_, i) => ({
+                    id: i,
+                    name: `Researcher ${i+1}`,
+                    discipline: this.getRandomDiscipline(),
+                    publications: Math.floor(Math.random() * 20)
+                }));
+
+                // Create random connections
+                for (let i = 0; i < this.nodes.length; i++) {
+                    for (let j = i + 1; j < this.nodes.length; j++) {
+                        if (Math.random() < 0.1) {  // 10% connection probability
+                            this.links.push({
+                                source: i,
+                                target: j,
+                                strength: Math.random()
+                            });
+                        }
+                    }
+                }
+
+                return { nodes: this.nodes, links: this.links };
+            }
+
+            generateScaleFreeNetwork() {
+                // Preferential attachment model
+                this.nodes = [
+                    { id: 0, name: 'Seed Researcher', discipline: 'Interdisciplinary', publications: 50 }
+                ];
+
+                for (let i = 1; i < this.nodeCount; i++) {
+                    const newNode = {
+                        id: i,
+                        name: `Researcher ${i+1}`,
+                        discipline: this.getRandomDiscipline(),
+                        publications: Math.floor(Math.random() * 20)
+                    };
+
+                    // Connect to existing nodes based on their "popularity"
+                    const existingNodes = this.nodes;
+                    const totalConnections = existingNodes.reduce((sum, node) => 
+                        sum + this.links.filter(l => l.source === node.id || l.target === node.id).length, 0);
+
+                    existingNodes.forEach(node => {
+                        if (Math.random() < (this.links.filter(l => l.source === node.id || l.target === node.id).length / totalConnections)) {
+                            this.links.push({
+                                source: node.id,
+                                target: i,
+                                strength: Math.random()
+                            });
+                        }
+                    });
+
+                    this.nodes.push(newNode);
+                }
+
+                return { nodes: this.nodes, links: this.links };
+            }
+
+            getRandomDiscipline() {
+                const disciplines = [
+                    'Computer Science', 'Physics', 'Biology', 'Mathematics', 
+                    'Chemistry', 'Economics', 'Psychology', 'Sociology'
+                ];
+                return disciplines[Math.floor(Math.random() * disciplines.length)];
+            }
+
+            calculateNetworkMetrics() {
+                const totalConnections = this.links.length;
+                const possibleConnections = (this.nodeCount * (this.nodeCount - 1)) / 2;
+                const networkDensity = (totalConnections / possibleConnections).toFixed(3);
+
+                document.getElementById('total-nodes').textContent = this.nodeCount;
+                document.getElementById('total-connections').textContent = totalConnections;
+                document.getElementById('network-density').textContent = networkDensity;
+            }
+        }
+
+        function visualizeNetwork(graph, layoutMode) {
+            const container = d3.select("#graph-container");
+            container.selectAll("*").remove();
+
+            const svg = container.append("svg")
+                .attr("width", "100%")
+                .attr("height", "100%");
+
+            const width = container.node().getBoundingClientRect().width;
+            const height = container.node().getBoundingClientRect().height;
+
+            const color = d3.scaleOrdinal(d3.schemeCategory10);
+
+            let simulation;
+            switch(layoutMode) {
+                case 'force':
+                    simulation = d3.forceSimulation(graph.nodes)
+                        .force("link", d3.forceLink(graph.links).id(d => d.id))
+                        .force("charge", d3.forceManyBody().strength(-50))
+                        .force("center", d3.forceCenter(width / 2, height / 2));
+                    break;
+                case 'cluster':
+                    simulation = d3.forceSimulation(graph.nodes)
+                        .force("cluster", d3.forceCluster().strength(0.5))
+                        .force("charge", d3.forceManyBody())
+                        .force("center", d3.forceCenter(width / 2, height / 2));
+                    break;
+                case 'radial':
+                    simulation = d3.forceSimulation(graph.nodes)
+                        .force("radial", d3.forceRadial(100, width / 2, height / 2))
+                        .force("charge", d3.forceManyBody());
+                    break;
+            }
+
+            const link = svg.append("g")
+                .selectAll("line")
+                .data(graph.links)
+                .enter().append("line")
+                .attr("stroke", "#aaa")
+                .attr("stroke-width", d => d.strength * 3);
+
+            const node = svg.append("g")
+                .selectAll("g")
+                .data(graph.nodes)
+                .enter().append("g")
+                .call(d3.drag()
+                    .on("start", dragstarted)
+                    .on("drag", dragged)
+                    .on("end", dragended));
+
+            node.append("circle")
+                .attr("r", d => 5 + d.publications)
+                .attr("fill", d => color(d.discipline));
+
+            node.append("text")
+                .attr("class", "node-label")
+                .attr("dx", 12)
+                .attr("dy", ".35em")
+                .text(d => d.name);
+
+            simulation.on("tick", () => {
+                link
+                    .attr("x1", d => d.source.x)
+                    .attr("y1", d => d.source.y)
+                    .attr("x2", d => d.target.x)
+                    .attr("y2", d => d.target.y);
+
+                node
+                    .attr("transform", d => `translate(${d.x},${d.y})`);
+            });
+
+            function dragstarted(event) {
+                if (!event.active) simulation.alphaTarget(0.3).restart();
+                event.subject.fx = event.subject.x;
+                event.subject.fy = event.subject.y;
+            }
+
+            function dragged(event) {
+                event.subject.fx = event.x;
+                event.subject.fy = event.y;
+            }
+
+            function dragended(event) {
+                if (!event.active) simulation.alphaTarget(0);
+                event.subject.fx = null;
+                event.subject.fy = null;
+            }
+        }
+
+        function initializeGraph() {
+            const nodeCountInput = document.getElementById('node-count');
+            const networkTypeSelect = document.getElementById('network-type');
+            const layoutModeSelect = document.getElementById('layout-mode');
+
+            nodeCountInput.addEventListener('input', () => {
+                document.getElementById('node-count-display').textContent = nodeCountInput.value;
+                generateAndVisualizeGraph();
+            });
+
+            networkTypeSelect.addEventListener('change', generateAndVisualizeGraph);
+            layoutModeSelect.addEventListener('change', generateAndVisualizeGraph);
+
+            function generateAndVisualizeGraph() {
+                const nodeCount = parseInt(nodeCountInput.value);
+                const networkType = networkTypeSelect.value;
+                const layoutMode = layoutModeSelect.value;
+
+                const networkGenerator = new AcademicNetworkGenerator(nodeCount);
+                let graph;
+
+                switch(networkType) {
+                    case 'random':
+                        graph = networkGenerator.generateRandomNetwork();
+                        break;
+                    case 'scalefree':
+                        graph = networkGenerator.generateScaleFreeNetwork();
+                        break;
+                }
+
+                networkGenerator.calculateNetworkMetrics();
+                visualizeNetwork(graph, layoutMode);
+            }
+
+            // Initial graph generation
+            generateAndVisualizeGraph();
+        }
+
+        initializeGraph();
+    </script>
+</body>
+</html>
