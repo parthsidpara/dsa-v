@@ -1,4 +1,6 @@
-# Visualize DSA
+# DAA Project DA
+
+Name: Sidpara Parth
 
 [![Website](https://img.shields.io/badge/website-live-blue)](https://parthsidpara.github.io/dsa-v/)
 
@@ -32,21 +34,3 @@ Welcome to **Visualize DSA**, a web application that helps you master Data Struc
 ## Live Demo
 
 Check out the live version here: [Visualize DSA](https://parthsidpara.github.io/dsa-v/)
-
-## Project Structure
-
-- `/linked-list/linked-list.html`: Linked List Visualizer
-- `/sorting-algorithm/sorting-algorithm.html`: Sorting Algorithm Visualizer
-- `/stack.html`: Stack Visualizer
-- `/queue.html`: Queue Visualizer
-- `/graph.html`: Graph Visualizer
-
-## Future Enhancements
-
-- Add more data structures (e.g., Binary Trees, AVL Trees).
-- Implement search algorithms like DFS and BFS.
-- Include detailed explanations alongside visualizations.
-
-## Contributing
-
-Feel free to fork this repository and submit pull requests with improvements or new features. Contributions are welcome!
